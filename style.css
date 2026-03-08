@@ -1,0 +1,357 @@
+/* ================================
+   JX Design & Dev — style.css
+================================ */
+:root {
+  --neon: #33ff14;
+  --neon-dim: rgba(51, 255, 20, 0.15);
+  --neon-glow: rgba(51, 255, 20, 0.4);
+  --black: #000000;
+  --dark: #080808;
+  --dark-2: #0f0f0f;
+  --dark-3: #161616;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --white: #ffffff;
+  --white-60: rgba(255,255,255,0.6);
+  --white-30: rgba(255,255,255,0.3);
+  --white-10: rgba(255,255,255,0.1);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: var(--font-body); overflow-x: hidden; cursor: none; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* NOISE */
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* CURSOR */
+.cursor {
+  width: 10px; height: 10px; background: var(--neon); border-radius: 50%;
+  position: fixed; top:0; left:0; pointer-events: none; z-index: 10000;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 0 10px var(--neon), 0 0 30px var(--neon-glow);
+  transition: width .2s, height .2s;
+}
+.cursor-follower {
+  width: 36px; height: 36px; border: 1.5px solid var(--neon); border-radius: 50%;
+  position: fixed; top:0; left:0; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%); opacity: 0.5;
+  transition: width .3s, height .3s, opacity .3s;
+}
+.cursor.hover { width: 20px; height: 20px; }
+.cursor-follower.hover { width: 60px; height: 60px; opacity: 0.15; }
+
+/* NAV */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28px 60px; transition: all 0.4s var(--ease);
+}
+.nav.scrolled {
+  padding: 16px 60px;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.nav-logo { display:flex; align-items:center; gap:8px; font-family: var(--font-display); font-weight:800; }
+.logo-jx { color: var(--neon); font-size:1.4rem; letter-spacing:-1px; text-shadow: 0 0 20px var(--neon-glow); }
+.logo-text { font-size:0.9rem; color: var(--white-60); font-weight:500; }
+.nav-links { display:flex; align-items:center; gap:40px; }
+.nav-link {
+  font-size:0.85rem; font-weight:500; color: var(--white-60);
+  letter-spacing:0.05em; text-transform:uppercase; position:relative;
+  transition: color .2s;
+}
+.nav-link::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:1px; background: var(--neon); transition: width .2s;
+}
+.nav-link:hover { color: var(--white); }
+.nav-link:hover::after { width:100%; }
+.cta-link { color: var(--neon) !important; border:1px solid rgba(51,255,20,0.3); padding:8px 20px; border-radius:4px; }
+.cta-link:hover { background: var(--neon-dim) !important; box-shadow: 0 0 20px var(--neon-glow); }
+.cta-link::after { display:none !important; }
+.nav-menu { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.nav-menu span { display:block; width:24px; height:2px; background: var(--white); }
+
+/* ================================
+   HERO — FULL IMAGE LAYOUT
+================================ */
+.hero {
+  position: relative;
+  width: 100%; height: 100vh;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+
+/* Three.js canvas sits behind everything */
+#hero-canvas {
+  position: absolute; inset: 0;
+  width: 100% !important; height: 100% !important;
+  z-index: 1; pointer-events: none;
+}
+
+/* Full bleed photo — right side, large */
+.hero-image-wrap {
+  position: absolute;
+  right: 0; bottom: 0;
+  width: 60%; height: 100%;
+  z-index: 2;
+}
+.hero-photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+/* Gradient fade — left edge blends into black, bottom too */
+.hero-image-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, #000 0%, #000 10%, rgba(0,0,0,0.5) 45%, transparent 70%),
+    linear-gradient(to top, #000 0%, rgba(0,0,0,0.3) 20%, transparent 50%);
+}
+
+/* Floating badges */
+.badge {
+  position: absolute; z-index: 10;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  padding: 10px 16px; border-radius: 100px;
+  font-size: 0.75rem; font-family: var(--font-mono);
+  color: var(--white-60); white-space: nowrap;
+}
+.badge-1 { top: 140px; right: 80px; }
+.badge-2 { bottom: 100px; right: 100px; }
+.badge-dot {
+  width: 7px; height: 7px; background: var(--neon); border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon); animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.8); }
+}
+
+/* Hero text — bottom left over the image */
+.hero-content {
+  position: relative; z-index: 5;
+  padding: 0 60px 80px;
+  max-width: 680px;
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+}
+.eyebrow-line { display:block; width:36px; height:1px; background: var(--neon); opacity:0.7; }
+.eyebrow-text {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--neon); letter-spacing: 0.15em; text-transform: uppercase;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 9vw, 9rem);
+  font-weight: 800; line-height: 0.92;
+  letter-spacing: -0.03em; margin-bottom: 24px;
+}
+.title-line { display: block; color: var(--white); }
+.title-line.accent {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--neon);
+  text-shadow: 0 0 60px var(--neon-glow);
+}
+.hero-sub {
+  font-size: 1rem; line-height: 1.75;
+  color: var(--white-60); margin-bottom: 36px; max-width: 480px;
+}
+.highlight { color: var(--neon); font-weight: 600; }
+.hero-cta { display:flex; align-items:center; gap:16px; margin-bottom: 36px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-body); font-size: 0.88rem; font-weight: 600;
+  padding: 13px 26px; border-radius: 6px;
+  transition: all 0.35s var(--ease); cursor: none;
+}
+.btn-primary {
+  background: var(--neon); color: var(--black);
+  box-shadow: 0 0 30px var(--neon-glow);
+}
+.btn-primary:hover {
+  background: #fff;
+  box-shadow: 0 0 50px var(--neon-glow), 0 0 100px rgba(51,255,20,0.2);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  background: transparent; color: var(--white-60);
+  border: 1px solid var(--glass-border);
+}
+.btn-ghost:hover { color: var(--white); border-color: var(--white-30); background: var(--glass); }
+.hero-tags { display:flex; flex-wrap:wrap; gap:8px; }
+.tag {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--white-30); border: 1px solid rgba(255,255,255,0.07);
+  padding: 5px 13px; border-radius: 100px; letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.tag:hover { color: var(--neon); border-color: rgba(51,255,20,0.3); }
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute; bottom: 40px; left: 60px; z-index: 10;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--white-30); letter-spacing: 0.1em;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--neon), transparent);
+  animation: scroll-anim 2s ease-in-out infinite;
+}
+@keyframes scroll-anim {
+  0%,100% { opacity:1; transform:scaleY(1); }
+  50% { opacity:0.3; transform:scaleY(0.5); }
+}
+
+/* ================================
+   STATS BAR
+================================ */
+.stats-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 60px; padding: 60px;
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--dark-2);
+}
+.stat { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.stat-num {
+  font-family: var(--font-display); font-size: 3rem; font-weight: 800;
+  color: var(--neon); line-height: 1; text-shadow: 0 0 30px var(--neon-glow);
+}
+.stat-label {
+  font-size: 0.72rem; color: var(--white-30); letter-spacing: 0.1em;
+  text-transform: uppercase; font-family: var(--font-mono);
+}
+.stat-divider { color: rgba(51,255,20,0.3); font-size:1rem; }
+
+/* MARQUEE */
+.marquee-wrapper { overflow:hidden; background: var(--neon); padding:14px 0; }
+.marquee-track { display:flex; width:max-content; animation: marquee 25s linear infinite; }
+.marquee-track span {
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight:500;
+  color: var(--black); letter-spacing: 0.1em; padding-right: 40px; white-space: nowrap;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-image-wrap { width: 70%; }
+  .badge-1, .badge-2 { display:none; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 20px 24px; }
+  .nav.scrolled { padding: 14px 24px; }
+  .nav-links { display: none; }
+  .nav-menu { display: flex; }
+  .hero-image-wrap { width: 100%; opacity: 0.4; }
+  .hero-content { padding: 0 24px 80px; }
+  .stats-bar { flex-wrap:wrap; gap:30px; padding:40px 24px; }
+  .stat-divider { display:none; }
+  .scroll-indicator { left:24px; }
+}
+
+/* ================================
+   HERO FIXES & ENHANCEMENTS
+================================ */
+
+/* Fix scroll indicator position */
+.scroll-indicator {
+  position: absolute !important;
+  bottom: 36px !important;
+  left: 60px !important;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--white-30);
+  letter-spacing: 0.1em;
+  writing-mode: vertical-rl;
+  flex-direction: column-reverse;
+}
+
+/* Glowing neon text stroke on Ferdinand */
+.title-line.accent {
+  position: relative;
+  display: inline-block;
+}
+.title-line.accent::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--neon);
+  filter: blur(8px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Hero image — ensure it covers right side properly */
+.hero-image-wrap {
+  position: absolute;
+  right: 0; bottom: 0;
+  width: 65%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* Stronger gradient blend */
+.hero-image-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, #000000 0%, #000000 15%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 65%, transparent 80%),
+    linear-gradient(to top, #000000 0%, rgba(0,0,0,0.5) 15%, transparent 40%),
+    linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 20%);
+}
+
+/* Neon glow pulse on the JX logo */
+.logo-jx {
+  animation: logo-glow 3s ease-in-out infinite;
+}
+@keyframes logo-glow {
+  0%, 100% { text-shadow: 0 0 20px var(--neon-glow); }
+  50% { text-shadow: 0 0 40px var(--neon-glow), 0 0 80px rgba(51,255,20,0.2); }
+}
+
+/* Available badge pulsing border */
+.badge-1 {
+  animation: badge-float 4s ease-in-out infinite;
+}
+.badge-2 {
+  animation: badge-float 4s ease-in-out infinite 2s;
+}
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Hero content — ensure it's above the image overlay */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  padding: 0 60px 80px;
+  max-width: 680px;
+  align-self: flex-end;
+}
