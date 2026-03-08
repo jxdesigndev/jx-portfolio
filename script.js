@@ -119,7 +119,6 @@ window.addEventListener('resize', () => {
 // ================================
 gsap.registerPlugin(ScrollTrigger);
 
-// Set initial states
 gsap.set('.hero-photo', { opacity: 0, scale: 1.08, x: 40 });
 gsap.set('.hero-eyebrow', { opacity: 0, x: -40 });
 gsap.set('.title-line', { opacity: 0, y: 100, skewY: 5 });
@@ -131,102 +130,51 @@ gsap.set('.scroll-indicator', { opacity: 0 });
 gsap.set('#hero-canvas', { opacity: 0 });
 
 const heroTL = gsap.timeline({ delay: 0.2 });
-
 heroTL
-  .to('#hero-canvas', { opacity: 1, duration: 2.5, ease: 'power2.out' })
-  .to('.hero-photo', {
-    opacity: 1, scale: 1, x: 0,
-    duration: 1.8, ease: 'power4.out'
-  }, 0.3)
-  .to('.hero-eyebrow', {
-    opacity: 1, x: 0,
-    duration: 0.9, ease: 'power3.out'
-  }, 0.8)
-  .to('.title-line', {
-    opacity: 1, y: 0, skewY: 0,
-    stagger: 0.14, duration: 1.1, ease: 'power4.out'
-  }, 1.0)
-  .to('.hero-sub', {
-    opacity: 1, y: 0,
-    duration: 0.85, ease: 'power3.out'
-  }, 1.5)
-  .to('.hero-cta', {
-    opacity: 1, y: 0,
-    duration: 0.75, ease: 'power3.out'
-  }, 1.75)
-  .to('.tag', {
-    opacity: 1, y: 0,
-    stagger: 0.06, duration: 0.55, ease: 'power3.out'
-  }, 1.95)
-  .to('.badge', {
-    opacity: 1, y: 0,
-    stagger: 0.2, duration: 0.7, ease: 'power3.out'
-  }, 1.6)
-  .to('.scroll-indicator', {
-    opacity: 1, duration: 0.6
-  }, 2.3);
+  .to('#hero-canvas',   { opacity: 1, duration: 2.5, ease: 'power2.out' })
+  .to('.hero-photo',    { opacity: 1, scale: 1, x: 0, duration: 1.8, ease: 'power4.out' }, 0.3)
+  .to('.hero-eyebrow',  { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 0.8)
+  .to('.title-line',    { opacity: 1, y: 0, skewY: 0, stagger: 0.14, duration: 1.1, ease: 'power4.out' }, 1.0)
+  .to('.hero-sub',      { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' }, 1.5)
+  .to('.hero-cta',      { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, 1.75)
+  .to('.tag',           { opacity: 1, y: 0, stagger: 0.06, duration: 0.55, ease: 'power3.out' }, 1.95)
+  .to('.badge',         { opacity: 1, y: 0, stagger: 0.2, duration: 0.7, ease: 'power3.out' }, 1.6)
+  .to('.scroll-indicator', { opacity: 1, duration: 0.6 }, 2.3);
 
-// Photo subtle parallax on scroll
+// Photo parallax on scroll
 gsap.to('.hero-photo', {
-  scrollTrigger: {
-    trigger: '.hero',
-    start: 'top top',
-    end: 'bottom top',
-    scrub: 1.5,
-  },
-  y: 100,
-  scale: 1.06,
-  ease: 'none',
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 },
+  y: 100, scale: 1.06, ease: 'none',
 });
 
-// Hero content subtle upward drift on scroll
+// Content drift on scroll
 gsap.to('.hero-content', {
-  scrollTrigger: {
-    trigger: '.hero',
-    start: 'top top',
-    end: 'bottom top',
-    scrub: 1,
-  },
-  y: -60,
-  ease: 'none',
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
+  y: -60, ease: 'none',
 });
 
 // ================================
-// STATS COUNTER — Bulletproof version
+// STATS COUNTER — Simple & Reliable
 // ================================
-function animateCounter(el) {
-  const target = parseInt(el.getAttribute('data-count'));
-  const suffix = el.getAttribute('data-suffix') || '+';
-  const duration = 2000; // ms
-  const start = performance.now();
-
-  function update(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.floor(eased * target);
-    el.textContent = current + (progress === 1 ? suffix : '');
-    if (progress < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-
-// Use IntersectionObserver — fires when stats section enters view
-const statsSection = document.getElementById('stats-bar');
-let counted = false;
-
-const statsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !counted) {
-      counted = true;
-      document.querySelectorAll('.stat-num').forEach(el => animateCounter(el));
-      statsObserver.disconnect();
-    }
-  });
-}, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
-
-statsObserver.observe(statsSection);
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.stat-num').forEach((el) => {
+      const target = parseInt(el.getAttribute('data-count'));
+      const isPercent = el.getAttribute('data-count') === '100';
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          el.textContent = target + (isPercent ? '%' : '+');
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(current);
+        }
+      }, 30);
+    });
+  }, 1500);
+});
 
 // Stats entrance animation
 gsap.from('.stat', {
