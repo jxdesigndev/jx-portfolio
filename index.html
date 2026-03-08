@@ -11,9 +11,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css?v=4"/>
 </head>
 <body>
+
   <div class="cursor" id="cursor"></div>
   <div class="cursor-follower" id="cursor-follower"></div>
   <div class="noise"></div>
@@ -36,7 +37,7 @@
     <canvas id="hero-canvas"></canvas>
 
     <div class="hero-image-wrap">
-      <img src="assets/images/okezie-1.png" alt="Okezie Ferdinand" class="hero-photo" id="hero-photo"/>
+      <img src="assets/images/okezie-1.png" alt="Okezie Ferdinand" class="hero-photo"/>
       <div class="hero-image-overlay"></div>
     </div>
 
@@ -45,13 +46,13 @@
       <span>Available for work</span>
     </div>
     <div class="badge badge-2">
-      <span>UI/UX · Security · Automation</span>
+      <span>UI/UX &middot; Security &middot; Automation</span>
     </div>
 
     <div class="hero-content">
       <div class="hero-eyebrow">
         <span class="eyebrow-line"></span>
-        <span class="eyebrow-text">System Designer & Builder</span>
+        <span class="eyebrow-text">System Designer &amp; Builder</span>
       </div>
       <h1 class="hero-title">
         <span class="title-line">Okezie</span>
@@ -66,7 +67,9 @@
       <div class="hero-cta">
         <a href="#work" class="btn btn-primary">
           <span>View My Work</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </a>
         <a href="#contact" class="btn btn-ghost">Start a Project</a>
       </div>
@@ -86,23 +89,37 @@
     </div>
   </section>
 
+  <!-- STATS -->
   <section class="stats-bar" id="stats-bar">
-    <div class="stat"><span class="stat-num" data-count="4">0</span><span class="stat-label">Years Building</span></div>
-    <div class="stat-divider">✦</div>
-    <div class="stat"><span class="stat-num" data-count="20">0</span><span class="stat-label">Projects Completed</span></div>
-    <div class="stat-divider">✦</div>
-    <div class="stat"><span class="stat-num" data-count="4">0</span><span class="stat-label">Disciplines Mastered</span></div>
-    <div class="stat-divider">✦</div>
-    <div class="stat"><span class="stat-num" data-count="100" data-suffix="%">0</span><span class="stat-label">Passion-Driven</span></div>
+    <div class="stat">
+      <span class="stat-num" id="stat-1">0</span>
+      <span class="stat-label">Years Building</span>
+    </div>
+    <div class="stat-divider">&#10022;</div>
+    <div class="stat">
+      <span class="stat-num" id="stat-2">0</span>
+      <span class="stat-label">Projects Completed</span>
+    </div>
+    <div class="stat-divider">&#10022;</div>
+    <div class="stat">
+      <span class="stat-num" id="stat-3">0</span>
+      <span class="stat-label">Disciplines Mastered</span>
+    </div>
+    <div class="stat-divider">&#10022;</div>
+    <div class="stat">
+      <span class="stat-num" id="stat-4">0</span>
+      <span class="stat-label">Passion-Driven</span>
+    </div>
   </section>
 
+  <!-- MARQUEE -->
   <div class="marquee-wrapper">
     <div class="marquee-track">
-      <span>UI/UX Design ✦ Cybersecurity ✦ n8n Automation ✦ Vibe Coding ✦ System Design ✦ No-Code Dev ✦ Framer ✦ Figma ✦ Bubble ✦ Webflow ✦ Lovable ✦ Bolt ✦ </span>
-      <span>UI/UX Design ✦ Cybersecurity ✦ n8n Automation ✦ Vibe Coding ✦ System Design ✦ No-Code Dev ✦ Framer ✦ Figma ✦ Bubble ✦ Webflow ✦ Lovable ✦ Bolt ✦ </span>
+      <span>UI/UX Design &#10022; Cybersecurity &#10022; n8n Automation &#10022; Vibe Coding &#10022; System Design &#10022; No-Code Dev &#10022; Framer &#10022; Figma &#10022; Bubble &#10022; Webflow &#10022; Lovable &#10022; Bolt &#10022; </span>
+      <span>UI/UX Design &#10022; Cybersecurity &#10022; n8n Automation &#10022; Vibe Coding &#10022; System Design &#10022; No-Code Dev &#10022; Framer &#10022; Figma &#10022; Bubble &#10022; Webflow &#10022; Lovable &#10022; Bolt &#10022; </span>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
